@@ -1,36 +1,45 @@
-from pydantic import BaseSettings, Field, SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Optional
 
+class AWSSettings(BaseSettings):
+    access_key_id: Optional[str] = None
+    secret_access_key: Optional[str] = None
+    region: str = "us-east-1"
 
-class CloudCredentials(BaseSettings):
-    access_key_id: str | None = Field(None, env="AWS_ACCESS_KEY_ID")
-    secret_access_key: SecretStr | None = Field(None, env="AWS_SECRET_ACCESS_KEY")
-    region: str | None = Field(None, env="AWS_REGION")
+class AzureSettings(BaseSettings):
+    tenant_id: Optional[str] = None
+    client_id: Optional[str] = None
+    client_secret: Optional[str] = None
+    subscription_id: Optional[str] = None
+    # Para simplicidade inicial (Blob Storage). Em produção, use DefaultAzureCredential
+    connection_string: Optional[str] = None
 
-    model_config = {
-        "extra": "ignore",
-    }
+class GCPSettings(BaseSettings):
+    project_id: Optional[str] = None
+    # Caminho para o arquivo JSON de credenciais (recomendado)
+    credentials_path: Optional[str] = None
 
+class OracleSettings(BaseSettings):
+    config_file: Optional[str] = "~/.oci/config"   # caminho padrão do OCI CLI
+    profile: str = "DEFAULT"
+    # Namespace é obrigatório no OCI Object Storage
+    namespace: Optional[str] = None
+    compartment_id: Optional[str] = None   # Necessário para muitas operações
 
 class Settings(BaseSettings):
-    app_env: str = Field("development", env="APP_ENV")
-    app_host: str = Field("0.0.0.0", env="APP_HOST")
-    app_port: int = Field(8000, env="APP_PORT")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_ignore_empty=True,
+        extra="ignore",
+        env_nested_delimiter="__"   # permite AWS__REGION no .env
+    )
 
-    aws: CloudCredentials = CloudCredentials()
-    azure_tenant_id: str | None = Field(None, env="AZURE_TENANT_ID")
-    azure_client_id: str | None = Field(None, env="AZURE_CLIENT_ID")
-    azure_client_secret: SecretStr | None = Field(None, env="AZURE_CLIENT_SECRET")
-    azure_subscription_id: str | None = Field(None, env="AZURE_SUBSCRIPTION_ID")
-    gcp_project_id: str | None = Field(None, env="GCP_PROJECT_ID")
-    oracle_tenancy: str | None = Field(None, env="ORACLE_CLOUD_TENANCY")
-    oracle_user: str | None = Field(None, env="ORACLE_CLOUD_USER")
-    oracle_fingerprint: str | None = Field(None, env="ORACLE_CLOUD_FINGERPRINT")
-    oracle_private_key_file: str | None = Field(None, env="ORACLE_CLOUD_PRIVATE_KEY_FILE")
+    mcp_server_name: str = "AI-MultiCloud-Agent"
+    log_level: str = "INFO"
 
-    model_config = {
-        "env_file": ".env",
-        "case_sensitive": False,
-    }
-
+    aws: AWSSettings = AWSSettings()
+    azure: AzureSettings = AzureSettings()
+    gcp: GCPSettings = GCPSettings()
+    oracle: OracleSettings = OracleSettings()
 
 settings = Settings()

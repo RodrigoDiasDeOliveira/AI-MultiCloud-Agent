@@ -1,24 +1,46 @@
 [project]
 name = "ai-multicloud-agent"
 version = "0.1.0"
-description = "Multi-cloud automation agent built on an MCP Server architecture."
-readme = "README.md"
+description = "MCP Server completo para gerenciamento multi-cloud com AI Agents (AWS, Azure, GCP, Oracle OCI)"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+readme = "README.md"
+license = {text = "MIT"}
 
-dependencies = [
-  "fastapi>=0.105.0",
-  "uvicorn>=0.24.0",
-  "pydantic>=2.9.0"
+[dependency-groups]
+default = [
+    "mcp>=1.27.0",                          # SDK oficial Model Context Protocol
+    "fastmcp",                              # Framework Pythonic para MCP servers (recomendado em 2026)
+    "pydantic-settings>=2.7",
+    "python-dotenv>=1.0",
+    "structlog>=25.1",                      # Logging estruturado
+    "rich>=14.0",                           # CLI bonita
+    "typer>=0.15",                          # CLI para rodar server e agentes
+    "httpx>=0.28",
+
+    # Cloud SDKs oficiais
+    "boto3>=1.37",                          # AWS
+    "azure-identity>=1.20",
+    "azure-mgmt-compute>=34.0",
+    "azure-mgmt-storage>=22.0",
+    "azure-mgmt-network>=28.0",
+    "azure-mgmt-rdbms>=11.0",
+    "azure-mgmt-cosmosdb>=9.0",
+    "azure-mgmt-monitor>=7.0",
+    "google-cloud-compute>=1.20",
+    "google-cloud-storage>=3.0",
+    "google-cloud-sql>=1.8",
+    "google-cloud-monitoring>=2.25",
+    "oci>=2.140",                           # Oracle Cloud
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
-  "pytest>=8.0",
-  "pytest-asyncio>=0.22.0",
-  "python-dotenv>=1.0.0"
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "ruff>=0.11",
+    "mypy>=1.15",
+    "pre-commit>=4.0",
 ]
 
-[build-system]
-requires = ["hatchling>=1.17.0"]
-build-backend = "hatchling.build"
+[tool.uv]
+dev-dependencies = ["dev"]

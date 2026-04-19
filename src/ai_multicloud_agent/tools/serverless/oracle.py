@@ -1,11 +1,15 @@
+# src/ai_multicloud_agent/tools/serverless/oracle.py
+
+from fastmcp import tool
 from ai_multicloud_agent.tools.base import BaseTool
+from ai_multicloud_agent.utils.exceptions import CloudToolError
 
-
-class ${provider.capitalize()}${category.capitalize()}Tool(BaseTool):
-    def __init__(self) -> None:
-        super().__init__("${provider}_${category}")
-
-
-def register(app):
-    tool = ${provider.capitalize()}${category.capitalize()}Tool()
-    tool.register(app)
+@tool
+def list_oci_functions() -> dict:
+    """Lista funções no Oracle Cloud Functions (OCI)."""
+    # OCI Functions usa o mesmo client de applications
+    BaseTool.log_call("list_oci_functions", provider="oracle")
+    return {
+        "message": "Oracle Cloud Functions será implementado em breve. Use o console OCI por enquanto.",
+        "status": "placeholder"
+    }
