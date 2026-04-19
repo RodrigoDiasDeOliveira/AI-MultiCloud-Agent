@@ -1,0 +1,24 @@
+[project]
+name = "ai-multicloud-agent"
+version = "0.1.0"
+description = "Multi-cloud automation agent built on an MCP Server architecture."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+dependencies = [
+  "fastapi>=0.105.0",
+  "uvicorn>=0.24.0",
+  "pydantic>=2.9.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "pytest-asyncio>=0.22.0",
+  "python-dotenv>=1.0.0"
+]
+
+[build-system]
+requires = ["hatchling>=1.17.0"]
+build-backend = "hatchling.build"

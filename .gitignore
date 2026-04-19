@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.venv/
+venv/
+*.sqlite3
+*.db
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+*.log
+
+# IDEs
+.idea/
+.vscode/
+
+# Docker
+*.pem
+*.swp

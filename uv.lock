@@ -1,0 +1,10 @@
+[metadata]
+created = "2026-04-19T00:00:00Z"
+project = "ai-multicloud-agent"
+version = "0.1.0"
+
+[packages]
+fastapi = "0.105.0"
+uvicorn = "0.24.0"
+pydantic = "2.9.0"
+python-dotenv = "1.0.0"
