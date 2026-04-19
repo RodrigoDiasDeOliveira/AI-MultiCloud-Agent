@@ -8,7 +8,6 @@ setup_logging(settings.log_level)
 mcp = FastMCP(
     name=settings.mcp_server_name,
     version="0.1.0",
-    description="MCP Server completo para gerenciamento de infraestrutura multi-cloud via AI Agents"
 )
 
 # Registra automaticamente todas as tools das categorias

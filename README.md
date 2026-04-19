@@ -31,12 +31,34 @@ Projeto moderno (2026) que expõe um **Model Context Protocol (MCP) Server** per
 git clone https://github.com/seuusuario/ai-multicloud-agent.git
 cd ai-multicloud-agent
 
-# 2. Instale as dependências (recomendado uv)
-uv sync
+# 2. Instale as dependências do projeto e de desenvolvimento
+uv sync --all-groups
 
 # 3. Configure as credenciais
 cp .env.example .env
 # Edite o .env com suas chaves das clouds
 
-# 4. Rode o MCP Server
-uv run src/ai_multicloud_agent/main.py run
+# 4. Execute o MCP Server
+python src/ai_multicloud_agent/main.py run
+```
+
+## 🧪 Testes
+
+```bash
+# Execute a suíte de testes
+pytest -q
+```
+
+## 🔧 Health endpoint
+
+O projeto exporta um app FastAPI em `src/ai_multicloud_agent/main.py` para testes. Ele expõe a rota:
+
+- `GET /health`
+
+Esse endpoint é usado pelos testes unitários e de integração.
+
+## 📌 Observações
+
+- O pacote usa layout `src/`.
+- Para desenvolvimento, use `uv sync --all-groups` para garantir instalação das dependências de teste e desenvolvimento.
+- O servidor principal roda como CLI Typer, mas a aplicação FastAPI também está disponível para verificação de saúde e compatibilidade de testes.

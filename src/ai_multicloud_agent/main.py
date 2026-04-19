@@ -1,3 +1,4 @@
+from fastapi import FastAPI
 import typer
 from rich.console import Console
 from rich.panel import Panel
@@ -11,14 +12,21 @@ from ai_multicloud_agent.config.settings import settings
 from ai_multicloud_agent.tools.registry import register_all_tools
 
 console = Console()
-app = typer.Typer(
+cli = typer.Typer(
     name="ai-multicloud-agent",
     help="🚀 AI-MultiCloud-Agent - MCP Server para gerenciamento multi-cloud",
     add_completion=True,
     rich_markup_mode="rich"
 )
 
-@app.command()
+app = FastAPI(title="AI-MultiCloud-Agent API")
+
+
+@app.get("/health")
+def health() -> dict[str, str]:
+    return {"status": "ok", "environment": settings.environment}
+
+@cli.command()
 def run(
     host: str = typer.Option("0.0.0.0", "--host", "-h", help="Host para rodar o servidor"),
     port: int = typer.Option(8000, "--port", "-p", help="Porta do servidor MCP"),
@@ -51,7 +59,7 @@ def run(
         sys.exit(1)
 
 
-@app.command()
+@cli.command()
 def tools(
     category: Optional[str] = typer.Argument(
         None, 
@@ -98,7 +106,7 @@ def tools(
         rprint("\n[italic]Dica:[/italic] Use [bold]ai-multicloud-agent tools <categoria>[/bold] para mais detalhes.")
 
 
-@app.command()
+@cli.command()
 def status():
     """Mostra o status atual da configuração e clouds conectadas."""
     console.print(Panel.fit(
@@ -129,7 +137,7 @@ def status():
     console.print(table)
 
 
-@app.command()
+@cli.command()
 def version():
     """Mostra a versão do projeto."""
     rprint("[bold cyan]AI-MultiCloud-Agent[/bold cyan] [dim]v0.1.0[/dim]")
@@ -137,4 +145,4 @@ def version():
 
 
 if __name__ == "__main__":
-    app()
+    cli()

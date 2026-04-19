@@ -36,6 +36,7 @@ class Settings(BaseSettings):
 
     mcp_server_name: str = "AI-MultiCloud-Agent"
     log_level: str = "INFO"
+    environment: str = "development"
 
     aws: AWSSettings = AWSSettings()
     azure: AzureSettings = AzureSettings()
