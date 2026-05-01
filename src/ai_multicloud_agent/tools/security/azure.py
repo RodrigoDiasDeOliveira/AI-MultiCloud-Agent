@@ -1,11 +1,10 @@
 from ai_multicloud_agent.tools.base import BaseTool
 
 
-class ${provider.capitalize()}${category.capitalize()}Tool(BaseTool):
+class AzureSecurityTool(BaseTool):
     def __init__(self) -> None:
-        super().__init__("${provider}_${category}")
+        super().__init__("azure_security")
 
 
-def register(app):
-    tool = ${provider.capitalize()}${category.capitalize()}Tool()
-    tool.register(app)
+def azure_security_overview() -> dict[str, str]:
+    return {"status": "azure security stub", "message": "Implementação de segurança Azure pendente."}

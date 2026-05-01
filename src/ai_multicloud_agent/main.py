@@ -10,6 +10,8 @@ from typing import Optional
 from ai_multicloud_agent.mcp.server import mcp
 from ai_multicloud_agent.config.settings import settings
 from ai_multicloud_agent.tools.registry import register_all_tools
+from ai_multicloud_agent.core.registry import ToolRegistry
+from ai_multicloud_agent.providers import ProviderFactory
 
 console = Console()
 cli = typer.Typer(
@@ -20,11 +22,26 @@ cli = typer.Typer(
 )
 
 app = FastAPI(title="AI-MultiCloud-Agent API")
+registry = ToolRegistry()
 
 
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "environment": settings.environment}
+
+
+@app.get("/health/providers")
+def health_providers() -> dict:
+    providers = ["aws", "azure", "gcp", "oracle"]
+    status = [ProviderFactory.create_provider(provider).health_check() for provider in providers]
+    return {"providers": status}
+
+
+@app.get("/tools")
+def tools_api() -> dict:
+    tool_map = registry.discover_tool_functions()
+    return {"tools": tool_map}
+
 
 @cli.command()
 def run(
@@ -33,18 +50,17 @@ def run(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Modo verbose (mais logs)")
 ):
     """Inicia o MCP Server com todas as tools registradas."""
-    
+
     if verbose:
         settings.log_level = "DEBUG"
 
     console.print(Panel.fit(
-        "[bold cyan]AI-MultiCloud-Agent[/bold cyan] [dim]— MCP Server v0.1.0[/dim]\n"
+        "[bold cyan]AI-MultiCloud-Agent[/bold cyan] [dim]— MCP Server v0.2.0[/dim]\n"
         "Gerenciamento completo de infraestrutura em AWS, Azure, GCP e Oracle OCI",
         title="🚀 Iniciando Servidor",
         border_style="cyan"
     ))
 
-    # Registra todas as tools antes de iniciar
     register_all_tools(mcp)
 
     rprint(f"\n[green]✅ Servidor MCP rodando em:[/green] http://{host}:{port}")
@@ -62,7 +78,7 @@ def run(
 @cli.command()
 def tools(
     category: Optional[str] = typer.Argument(
-        None, 
+        None,
         help="Filtrar por categoria (storage, compute, database, networking, iam, serverless, containers, monitoring, kubernetes)"
     )
 ):
@@ -72,8 +88,6 @@ def tools(
         border_style="blue"
     ))
 
-    # Aqui poderíamos fazer uma introspecção mais avançada no futuro
-    # Por enquanto, mostramos as categorias registradas
     categories = {
         "storage": "Object Storage, Buckets, Upload/Download",
         "compute": "VMs, Instances, Scaling",
@@ -104,11 +118,6 @@ def tools(
             table.add_row(cat.upper(), desc)
         console.print(table)
         rprint("\n[italic]Dica:[/italic] Use [bold]ai-multicloud-agent tools <categoria>[/bold] para mais detalhes.")
-
-
-@cli.command()
-def status():
-    """Mostra o status atual da configuração e clouds conectadas."""
     console.print(Panel.fit(
         "[bold cyan]Status do AI-MultiCloud-Agent[/bold cyan]",
         border_style="cyan"
@@ -121,18 +130,9 @@ def status():
     table.add_row("MCP Server Name", settings.mcp_server_name)
     table.add_row("Log Level", settings.log_level)
 
-    # Verifica quais clouds têm credenciais básicas configuradas
-    clouds = []
-    if settings.aws.access_key_id and settings.aws.secret_access_key:
-        clouds.append("AWS ✅")
-    if settings.azure.subscription_id and settings.azure.client_id:
-        clouds.append("Azure ✅")
-    if settings.gcp.project_id:
-        clouds.append("GCP ✅")
-    if settings.oracle.compartment_id and settings.oracle.namespace:
-        clouds.append("Oracle OCI ✅")
-
-    table.add_row("Clouds Configuradas", "\n".join(clouds) if clouds else "Nenhuma (configure no .env)")
+    provider_status = [ProviderFactory.create_provider(cloud).health_check() for cloud in ["aws", "azure", "gcp", "oracle"]]
+    for provider in provider_status:
+        table.add_row(f"{provider['provider'].upper()} Status", provider["status"])
 
     console.print(table)
 
@@ -140,7 +140,7 @@ def status():
 @cli.command()
 def version():
     """Mostra a versão do projeto."""
-    rprint("[bold cyan]AI-MultiCloud-Agent[/bold cyan] [dim]v0.1.0[/dim]")
+    rprint("[bold cyan]AI-MultiCloud-Agent[/bold cyan] [dim]v0.2.0[/dim]")
     rprint("MCP Server para AI Agents gerenciarem infraestrutura multi-cloud")
 
 

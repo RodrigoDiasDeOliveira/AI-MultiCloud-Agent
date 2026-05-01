@@ -1,11 +1,10 @@
 from ai_multicloud_agent.tools.base import BaseTool
 
 
-class ${provider.capitalize()}${category.capitalize()}Tool(BaseTool):
+class AWSSecurityTool(BaseTool):
     def __init__(self) -> None:
-        super().__init__("${provider}_${category}")
+        super().__init__("aws_security")
 
 
-def register(app):
-    tool = ${provider.capitalize()}${category.capitalize()}Tool()
-    tool.register(app)
+def aws_security_overview() -> dict[str, str]:
+    return {"status": "aws security stub", "message": "Implementação de segurança AWS pendente."}

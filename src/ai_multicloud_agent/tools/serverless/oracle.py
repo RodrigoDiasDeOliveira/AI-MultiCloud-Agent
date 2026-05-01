@@ -1,6 +1,6 @@
 # src/ai_multicloud_agent/tools/serverless/oracle.py
 
-from fastmcp import tool
+from fastmcp.tools import tool
 from ai_multicloud_agent.tools.base import BaseTool
 from ai_multicloud_agent.utils.exceptions import CloudToolError
 

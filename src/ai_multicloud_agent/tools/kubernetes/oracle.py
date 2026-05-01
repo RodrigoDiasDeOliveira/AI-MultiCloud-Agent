@@ -1,7 +1,7 @@
 # src/ai_multicloud_agent/tools/kubernetes/oracle.py
 
 import oci
-from fastmcp import tool
+from fastmcp.tools import tool
 from ai_multicloud_agent.config.settings import settings
 from ai_multicloud_agent.tools.base import BaseTool
 from ai_multicloud_agent.utils.exceptions import CloudToolError
