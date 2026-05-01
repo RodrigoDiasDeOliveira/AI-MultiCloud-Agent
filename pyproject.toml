@@ -6,19 +6,17 @@ requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "MIT"}
 
-[dependency-groups]
-default = [
-    "mcp>=1.27.0",                          # SDK oficial Model Context Protocol
-    "fastmcp",                              # Framework Pythonic para MCP servers (recomendado em 2026)
+dependencies = [
+    "fastapi>=0.105.0",
+    "mcp>=1.27.0",
+    "fastmcp",
     "pydantic-settings>=2.7",
     "python-dotenv>=1.0",
-    "structlog>=25.1",                      # Logging estruturado
-    "rich>=14.0",                           # CLI bonita
-    "typer>=0.15",                          # CLI para rodar server e agentes
+    "structlog>=25.1",
+    "rich>=14.0",
+    "typer>=0.15",
     "httpx>=0.28",
-
-    # Cloud SDKs oficiais
-    "boto3>=1.37",                          # AWS
+    "boto3>=1.37",
     "azure-identity>=1.20",
     "azure-mgmt-compute>=34.0",
     "azure-mgmt-storage>=22.0",
@@ -29,17 +27,22 @@ default = [
     "google-cloud-compute>=1.20",
     "google-cloud-storage>=3.0",
     "google-cloud-monitoring>=2.25",
-    "oci>=2.140",                           # Oracle Cloud
+    "oci>=2.140",
 ]
 
+[project.optional-dependencies]
 dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.25",
-    "fastapi>=0.105.0",
     "ruff>=0.11",
     "mypy>=1.15",
     "pre-commit>=4.0",
 ]
 
 [tool.pytest.ini_options]
+testpaths = ["tests"]
 pythonpath = ["src"]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
