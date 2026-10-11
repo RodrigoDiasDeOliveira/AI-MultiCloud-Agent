@@ -6,7 +6,9 @@
 
 Projeto moderno (2026) que expõe um **Model Context Protocol (MCP) Server** permitindo que agentes de IA controlem infraestrutura completa em **AWS, Azure, Google Cloud e Oracle OCI** usando linguagem natural.
 
-**Status:** ✅ Totalmente funcional e pronto para uso pessoal e corporativo.
+**Status:** implementação em desenvolvimento; o repositório contém caminhos de MCP e ferramentas cloud, mas CI, entrypoint/healthcheck, dependências opcionais e comportamento de cada provedor precisam de verificação antes de afirmar prontidão para produção.
+
+Consulte a [revisão de evidências de implementação](docs/ai-multicloud-agent-implementation-evidence-2026-10-11.md) para a comparação entre README, código, CI e Docker.
 
 ## ✨ Funcionalidades
 
